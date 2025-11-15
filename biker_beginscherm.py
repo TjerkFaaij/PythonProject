@@ -52,7 +52,8 @@ class StartScreen(tk.Frame):
             text="Account aanmaken",
             font=("Arial", 16),
             height=2,
-            width=20
+            width=20,
+            command=lambda: controller.show_frame("RegisterScreen")
         )
         register_btn.pack(pady=10)
 

@@ -2,24 +2,20 @@ import tkinter as tk
 from tkinter import messagebox
 
 
-class RegisterScreen(tk.Tk):
-    def __init__(self):
-        super().__init__()
+class RegisterScreen(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
 
-        self.title("Biker - Account aanmaken")
-        self.geometry("500x600")
-        self.resizable(True, True)
-
-        # Hoofdtitel
+        # Titel bovenaan
         title_label = tk.Label(self, text="Account aanmaken",
                                font=("Arial", 24, "bold"))
         title_label.pack(pady=20)
 
-        # Frame voor het formulier (één kolom)
-        form_frame = tk.Frame(self)
-        form_frame.pack(padx=40, pady=10, fill="x")
+        # Formulierframe
+        form = tk.Frame(self)
+        form.pack(padx=40, pady=10, fill="x")
 
-        # Velden-definitie: veldnaam → (labeltekst)
         self.fields = {}
         self.errors = {}
 
@@ -38,24 +34,23 @@ class RegisterScreen(tk.Tk):
         row = 0
         for field_key, field_label in field_definitions:
             # Label
-            label = tk.Label(form_frame, text=field_label)
+            label = tk.Label(form, text=field_label)
             label.grid(row=row, column=0, sticky="w", pady=(5, 0))
             row += 1
 
             # Entry
             if "password" in field_key:
-                entry = tk.Entry(form_frame, show="*")
+                entry = tk.Entry(form, show="*")
             else:
-                entry = tk.Entry(form_frame)
+                entry = tk.Entry(form)
 
             entry.grid(row=row, column=0, sticky="ew")
-            form_frame.grid_columnconfigure(0, weight=1)
+            form.grid_columnconfigure(0, weight=1)
             self.fields[field_key] = entry
             row += 1
 
-            # Error label (leeg, rood)
-            error_label = tk.Label(form_frame, text="",
-                                   fg="red", font=("Arial", 8))
+            # Error label
+            error_label = tk.Label(form, text="", fg="red", font=("Arial", 8))
             error_label.grid(row=row, column=0, sticky="w")
             self.errors[field_key] = error_label
             row += 1
@@ -81,7 +76,7 @@ class RegisterScreen(tk.Tk):
             cursor="hand2"
         )
         link_label.pack()
-        link_label.bind("<Button-1>", self.go_to_login)
+        link_label.bind("<Button-1>", self.back_to_start)
 
     def clear_errors(self):
         for lbl in self.errors.values():
@@ -118,21 +113,15 @@ class RegisterScreen(tk.Tk):
         if not valid:
             return
 
-        # Hier zou je het account in een database opslaan.
-        # Voor nu alleen een melding + "redirect" naar inloggen.
+        # Hier account opslaan in csv?
         messagebox.showinfo(
             "Account aangemaakt",
             "Je account is aangemaakt.\nJe wordt nu doorgestuurd naar het inlogscherm."
         )
-        self.go_to_login()
 
-    def go_to_login(self, event=None):
-        # In een later stadium kun je hier het echte inlogscherm openen.
-        # Voor nu alleen een print of messagebox.
-        print("Hier zou het inlogscherm geopend worden.")
-        messagebox.showinfo("Inloggen", "Hier zou nu het inlogscherm openen.")
+        # Voor nu: terug naar beginscherm
+        self.controller.show_frame("StartScreen")
 
+    def back_to_start(self, event=None):
+        self.controller.show_frame("StartScreen")
 
-if __name__ == "__main__":
-    app = RegisterApp()
-    app.mainloop()
