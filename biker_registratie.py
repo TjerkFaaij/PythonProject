@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 
-class RegisterApp(tk.Tk):
+class RegisterScreen(tk.Tk):
     def __init__(self):
         super().__init__()
 
