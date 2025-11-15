@@ -7,10 +7,10 @@ class BikerApp(tk.Tk):
 
         self.title("Biker")
         self.geometry("600x600")
-        self.resizable(False, False)
+        self.resizable(True, True)
 
         self.container = tk.Frame(self)
-        self.container.pack(fill="both", expand=True)
+        self.container.pack(expand=True)
         self.frames = {}
 
         # Registreer alle schermen
