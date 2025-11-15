@@ -1,9 +1,31 @@
 import tkinter as tk
 
-root = tk.Tk()
-root.title("Biker")
-root.geometry("500x400")
-root.resizable(False, False)
+class BikerApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Biker")
+        self.geometry("600x600")
+        self.resizable(False, False)
+
+        self.container = tk.Frame(self)
+        self.container.pack(fill="both", expand=True)
+        self.frames = {}
+
+        # Registreer alle schermen
+        for F in (StartScreen, RegisterScreen):
+            frame = F(parent=self.container, controller=self)
+            self.frames[F.__name__] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        # Start met beginscherm
+        self.show_frame("StartScreen")
+
+    # Wisselt tussen scherm
+    def show_frame(self, name: str):
+        frame = self.frames[name]
+        frame.tkraise()
+
 
 # Logo bovenaan
 logo_label = tk.Label(root, text="BIKER", font=("Arial", 32, "bold"))
