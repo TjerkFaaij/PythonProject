@@ -1,5 +1,6 @@
 import tkinter as tk
 from biker_registratie import RegisterScreen
+from biker_inloggen import LoginScreen
 
 class BikerApp(tk.Tk):
     def __init__(self):
@@ -11,28 +12,27 @@ class BikerApp(tk.Tk):
 
         self.container = tk.Frame(self)
         self.container.pack(expand=True)
+
         self.frames = {}
 
         # Registreer alle schermen
-        for F in (StartScreen, RegisterScreen):
+        for F in (StartScreen, RegisterScreen, LoginScreen):   # <-- LoginScreen toegevoegd
             frame = F(parent=self.container, controller=self)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        # Start met beginscherm
         self.show_frame("StartScreen")
 
-    # Wisselt tussen scherm
     def show_frame(self, name: str):
         frame = self.frames[name]
         frame.tkraise()
+
 
 class StartScreen(tk.Frame):
     def __init__(self, parent, controller: BikerApp):
         super().__init__(parent)
         self.controller = controller
 
-        # Logo bovenaan
         logo_label = tk.Label(self, text="BIKER", font=("Arial", 32, "bold"))
         logo_label.pack(pady=40)
 
@@ -42,7 +42,8 @@ class StartScreen(tk.Frame):
             text="Inloggen",
             font=("Arial", 16),
             height=2,
-            width=20
+            width=20,
+            command=lambda: controller.show_frame("LoginScreen")
         )
         login_btn.pack(pady=10)
 
