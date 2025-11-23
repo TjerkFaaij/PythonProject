@@ -88,6 +88,6 @@ class LoginScreen(tk.Frame):
 
         if self.check_csv(email, password):
             messagebox.showinfo("OK", "Inloggen gelukt!")
-            self.controller.show_frame("StartScreen")
+            self.controller.show_frame("NewReservationScreen")
         else:
             self.password_error.config(text="Onjuiste gegevens")

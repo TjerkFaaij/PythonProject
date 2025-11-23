@@ -1,6 +1,7 @@
 import tkinter as tk
 from biker_registratie import RegisterScreen
 from biker_inloggen import LoginScreen
+from biker_reservering import NewReservationScreen
 
 class BikerApp(tk.Tk):
     def __init__(self):
@@ -16,7 +17,7 @@ class BikerApp(tk.Tk):
         self.frames = {}
 
         # registreer schermen
-        for F in (StartScreen, RegisterScreen, LoginScreen):
+        for F in (StartScreen, RegisterScreen, LoginScreen, NewReservationScreen):
             frame = F(parent=self.container, controller=self)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
