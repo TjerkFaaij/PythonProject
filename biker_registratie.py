@@ -39,11 +39,7 @@ class RegisterScreen(tk.Frame):
             row += 1
 
             # Entry
-            if "password" in field_key:
-                entry = tk.Entry(form, show="*")
-            else:
-                entry = tk.Entry(form)
-
+            entry = tk.Entry(form, show="*" if "password" in field_key else "")
             entry.grid(row=row, column=0, sticky="ew")
             form.grid_columnconfigure(0, weight=1)
             self.fields[field_key] = entry
@@ -60,7 +56,7 @@ class RegisterScreen(tk.Frame):
             self,
             text="Account aanmaken",
             font=("Arial", 14, "bold"),
-            bg="#ff8800",        # opvallende kleur
+            bg="#ff8800",
             fg="white",
             activebackground="#ff9900",
             activeforeground="white",
@@ -68,7 +64,7 @@ class RegisterScreen(tk.Frame):
         )
         submit_btn.pack(pady=20, ipadx=10, ipady=5)
 
-        # "Link" naar inloggen
+        # Link naar inlogscherm
         link_label = tk.Label(
             self,
             text="Al een account? Inloggen",
@@ -76,35 +72,36 @@ class RegisterScreen(tk.Frame):
             cursor="hand2"
         )
         link_label.pack()
-        link_label.bind("<Button-1>", self.back_to_start)
+        link_label.bind("<Button-1>", lambda e: controller.show_frame("LoginScreen"))
+
 
     def clear_errors(self):
         for lbl in self.errors.values():
             lbl.config(text="")
 
     def on_submit(self):
-        """Validaties uitvoeren en reacties tonen."""
         self.clear_errors()
+
         data = {k: v.get().strip() for k, v in self.fields.items()}
         valid = True
 
-        # Elke veld is verplicht
+        # verplicht
         for key, value in data.items():
             if not value:
                 self.errors[key].config(text="Dit veld is verplicht.")
                 valid = False
 
-        # Wachtwoord-validaties alleen controleren als ze niet leeg zijn
         password = data.get("password", "")
         password_confirm = data.get("password_confirm", "")
 
+        # wachtwoordregels
         if password and len(password) < 8:
             self.errors["password"].config(
                 text="Wachtwoord moet minimaal 8 tekens bevatten."
             )
             valid = False
 
-        if password and password_confirm and password != password_confirm:
+        if password != password_confirm:
             self.errors["password_confirm"].config(
                 text="Wachtwoord en bevestiging komen niet overeen."
             )
@@ -113,15 +110,11 @@ class RegisterScreen(tk.Frame):
         if not valid:
             return
 
-        # Hier account opslaan in csv?
         messagebox.showinfo(
             "Account aangemaakt",
             "Je account is aangemaakt.\nJe wordt nu doorgestuurd naar het inlogscherm."
         )
 
-        # Voor nu: terug naar beginscherm
-        self.controller.show_frame("StartScreen")
+        self.controller.show_frame("LoginScreen")
 
-    def back_to_start(self, event=None):
-        self.controller.show_frame("StartScreen")
 
