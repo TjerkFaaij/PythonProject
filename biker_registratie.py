@@ -68,6 +68,21 @@ class RegisterScreen(tk.Frame):
         for lbl in self.errors.values():
             lbl.config(text="")
 
+    def email_exists(self, email):
+        import os, csv
+
+        if not os.path.isfile("accounts.csv"):
+            return False
+
+        with open("accounts.csv", newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+
+            for row in reader:
+                if row["email"] == email:
+                    return True
+
+        return False
+
     #
     # --- CSV OPSLAAN ---
     #
@@ -129,6 +144,11 @@ class RegisterScreen(tk.Frame):
             valid = False
 
         if not valid:
+            return
+
+        # email uniek?
+        if self.email_exists(data["email"]):
+            self.errors["email"].config(text="E-mailadres bestaat al")
             return
 
         self.save_to_csv(data)
