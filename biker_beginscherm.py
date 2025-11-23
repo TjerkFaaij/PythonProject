@@ -15,8 +15,8 @@ class BikerApp(tk.Tk):
 
         self.frames = {}
 
-        # Registreer alle schermen
-        for F in (StartScreen, RegisterScreen, LoginScreen):   # <-- LoginScreen toegevoegd
+        # registreer schermen
+        for F in (StartScreen, RegisterScreen, LoginScreen):
             frame = F(parent=self.container, controller=self)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -33,30 +33,32 @@ class StartScreen(tk.Frame):
         super().__init__(parent)
         self.controller = controller
 
-        logo_label = tk.Label(self, text="BIKER", font=("Arial", 32, "bold"))
-        logo_label.pack(pady=40)
+        main = tk.Frame(self)
+        main.pack(expand=True)
 
-        # Inloggen-knop
+        logo = tk.Label(main, text="BIKER", font=("Arial", 32, "bold"))
+        logo.pack(pady=40)
+
         login_btn = tk.Button(
-            self,
+            main,
             text="Inloggen",
             font=("Arial", 16),
-            height=2,
             width=20,
+            height=2,
             command=lambda: controller.show_frame("LoginScreen")
         )
         login_btn.pack(pady=10)
 
-        # Account aanmaken-knop
         register_btn = tk.Button(
-            self,
+            main,
             text="Account aanmaken",
             font=("Arial", 16),
-            height=2,
             width=20,
+            height=2,
             command=lambda: controller.show_frame("RegisterScreen")
         )
         register_btn.pack(pady=10)
+
 
 if __name__ == "__main__":
     app = BikerApp()
